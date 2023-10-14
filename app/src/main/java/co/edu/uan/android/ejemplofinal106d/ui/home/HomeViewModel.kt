@@ -6,8 +6,13 @@ import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    val myData = MutableLiveData<String>().apply {
+        value = "default value"
     }
-    val text: LiveData<String> = _text
+
+    fun changeData(newvalue: Int) {
+        // validar q el nuevo valor siga las reglas de negocio
+        // hacer los calculos
+        myData.value = "My new value is $newvalue"
+    }
 }

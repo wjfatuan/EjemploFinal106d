@@ -30,23 +30,13 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.viewmodel = homeViewModel
+        binding.lifecycleOwner = this
+        binding.btnChangeValue.setOnClickListener {
+            homeViewModel.changeData(30)
         }
-        //Load image with Picasso
-        Picasso
-            .get()
-            .load("https://i.imgur.com/DvpvklR.png")
-            .rotate(45.0f)
-            .into(binding.imageView)
-        // Animate the image with YoYo
-        YoYo.with(Techniques.Tada)
-            .duration(700)
-            .repeat(5)
-            .playOn(binding.imageView);
         return root
+
     }
 
     override fun onDestroyView() {
