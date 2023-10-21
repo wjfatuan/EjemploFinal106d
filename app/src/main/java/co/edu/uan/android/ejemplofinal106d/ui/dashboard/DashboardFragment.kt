@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import co.edu.uan.android.ejemplofinal106d.databinding.FragmentDashboardBinding
+import com.squareup.picasso.Picasso
 
 class DashboardFragment : Fragment() {
 
@@ -28,9 +29,15 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        dashboardViewModel.catUrl.observe(viewLifecycleOwner) {
+            Picasso.get()
+                .load(it)
+                .into(binding.imageDashboard)
+        }
+
+        binding.btnRefreshPhoto.setOnClickListener {
+            // llamar la logica que descarga una foto usando el API
+            dashboardViewModel.refreshPhoto()
         }
         return root
     }

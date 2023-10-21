@@ -33,7 +33,8 @@ class HomeFragment : Fragment() {
         binding.viewmodel = homeViewModel
         binding.lifecycleOwner = this
         binding.btnChangeValue.setOnClickListener {
-            homeViewModel.changeData(30)
+
+                homeViewModel.changeData(30)
         }
         return root
 
