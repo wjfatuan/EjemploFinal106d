@@ -1,10 +1,13 @@
 package co.edu.uan.android.ejemplofinal106d.ui.dashboard
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import co.edu.uan.android.ejemplofinal106d.service.CatPhoto
+import com.google.gson.Gson
 import com.koushikdutta.async.future.FutureCallback
 import com.koushikdutta.ion.Ion
 import org.json.JSONArray
@@ -23,9 +26,10 @@ class DashboardViewModel(val app: Application) : AndroidViewModel(app) {
             .asString()
             .setCallback(object: FutureCallback<String> {
                 override fun onCompleted(e: Exception?, result: String?) {
-                    val arr = JSONArray(result)
-                    val cat = arr.getJSONObject(0)
-                    _catUrl.value = cat.getString("url")
+                    val gson = Gson()
+                    val data = gson.fromJson(result, Array<CatPhoto>::class.java)
+                    Log.d("CATAPI",data[0].toString())
+                    _catUrl.value = data[0].url
                 }
 
             })
