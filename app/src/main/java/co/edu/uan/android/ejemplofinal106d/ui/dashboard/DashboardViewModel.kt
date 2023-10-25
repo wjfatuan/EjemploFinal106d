@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.edu.uan.android.ejemplofinal106d.database.Notification
+import co.edu.uan.android.ejemplofinal106d.database.NotificationsDatabase
 import co.edu.uan.android.ejemplofinal106d.service.CatApi
 import co.edu.uan.android.ejemplofinal106d.service.CatPhoto
 import com.google.gson.Gson
@@ -29,6 +31,14 @@ class DashboardViewModel(val app: Application) : AndroidViewModel(app) {
             val cats = CatApi.getInstance().search()
             Log.d("CATAPI","API result: $cats")
             _catUrl.value = cats[0].url
+            // generar notificacion de descarga de la foto
+            try {
+                val n = Notification("New photo: ${cats[0].url}")
+                val dao = NotificationsDatabase.getInstance(app).notificationsDao()
+                dao.create(n)
+            } catch (e: Exception) {
+                Log.e("CATAPI","ERROR: ${e.message}", e)
+            }
 
         }
     }
