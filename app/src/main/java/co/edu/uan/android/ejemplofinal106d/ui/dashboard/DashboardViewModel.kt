@@ -6,10 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import co.edu.uan.android.ejemplofinal106d.service.CatApi
 import co.edu.uan.android.ejemplofinal106d.service.CatPhoto
 import com.google.gson.Gson
 import com.koushikdutta.async.future.FutureCallback
 import com.koushikdutta.ion.Ion
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.lang.Exception
 
@@ -21,17 +24,12 @@ class DashboardViewModel(val app: Application) : AndroidViewModel(app) {
     val catUrl: LiveData<String> = _catUrl
 
     fun refreshPhoto() {
-        Ion.with(app)
-            .load("https://api.thecatapi.com/v1/images/search")
-            .asString()
-            .setCallback(object: FutureCallback<String> {
-                override fun onCompleted(e: Exception?, result: String?) {
-                    val gson = Gson()
-                    val data = gson.fromJson(result, Array<CatPhoto>::class.java)
-                    Log.d("CATAPI",data[0].toString())
-                    _catUrl.value = data[0].url
-                }
+        viewModelScope.launch {
+            // llamo al API dentro de una corutina
+            val cats = CatApi.getInstance().search()
+            Log.d("CATAPI","API result: $cats")
+            _catUrl.value = cats[0].url
 
-            })
+        }
     }
 }
